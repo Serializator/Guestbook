@@ -1,0 +1,22 @@
+version: '2'
+services:
+    web:
+        build: ./web
+        ports:
+            - '80:80'
+        volumes_from:
+            - processor
+        links:
+            - database
+            - processor
+    database:
+        image: mysql:8.0
+        ports:
+            - '3306:3306'
+        environment:
+            - 'MYSQL_ROOT_PASSWORD=root'
+            - 'MYSQL_DATABASE=guestbook'
+    processor:
+        image: php:7.1-fpm
+        volumes:
+            - ../Guestbook:/app
