@@ -17,6 +17,6 @@ services:
             - 'MYSQL_ROOT_PASSWORD=root'
             - 'MYSQL_DATABASE=guestbook'
     processor:
-        image: php:7.1-fpm
+        build: ./processor
         volumes:
             - ../Guestbook:/app
