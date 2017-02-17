@@ -1,37 +1,37 @@
-document.addEventListener('DOMContentLoad', function() {
+document.addEventListener('DOMContentLoaded', function() {
     load(document.getElementById('comments'), document.getElementById('pagination'), 0);
 });
 
-load(comments, pagination, offset) {
+function load(comments, pagination, offset) {
     var request = new XMLHttpRequest();
 
     request.onreadystatechange = function() {
-        if(readyState == 4) {
-            if(status == 200) {
+        if(this.readyState == 4) {
+            console.log(this.responseText);
+
+            if(this.status == 200) {
                 /* Show all messages. */
-            } else if(status == 500) {
+            } else if(this.status == 500) {
                 /* Handle the error. */
             }
         }
     }
 
-    /* Turn into a POST request. */
-    request.open('GET', ('endpoints/comments.php?offset=' + offset), true)
-    request.send();
+    request.open('POST', 'endpoints/comments.php', true)
+    request.send('offset=' + offset);
 }
 
-post(data) {
+function post(data) {
     var request = new XMLHttpRequest();
 
     request.onreadystatechange = function() {
-        if((readyState != 4) || (status != 500)) {
+        if((this.readyState == 4) || (this.status == 500)) {
             return;
         }
 
         /* Handle the error. */
     }
 
-    /* Turn into a POST request. */
-    request.open('GET', ('endpoints/post.php?firstName=' + data.get('firstName') + '&lastName=' + data.get('lastName') + '&email=' + data.get('email') + '&comment=' + data.get('comment')), true)
-    request.send();
+    request.open('POST', 'endpoints/post.php', true);
+    request.send('firstName=' + data.get('firstName') + '&lastName=' + data.get('lastName') + '&email=' + data.get('email') + '&comment=' + data.get('comment'));
 }

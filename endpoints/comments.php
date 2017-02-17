@@ -9,15 +9,12 @@
         $query->execute(array($offset));
 
         while($comment = $query->fetch(PDO::FETCH_ASSOC)) {
-            $comments($comment['id']) = array(
-                'username' => $comment['username'],
-                'comment' => $comment['comment'],
-                'date' => $comment['date']);
+            $comments[] = $comment;
         }
 
         print(json_encode($comments));
     } catch(PDOException $exception) {
-        print('Query Failed: ' . $exception->getMessage());
         http_response_code(500);
+        exit('Query Failed: ' . $exception->getMessage());
     }
 ?>
