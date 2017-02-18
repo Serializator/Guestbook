@@ -1,15 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
-    load(0);
+    load();
 });
 
-function load(offset) {
+function load() {
     var request = new XMLHttpRequest();
-    var params = ('offset=' + offset);
 
     request.onreadystatechange = function() {
         if(this.readyState == 4) {
-            console.log(this.responseText);
-
             if(this.status == 200) {
                 var json = JSON.parse(this.responseText);
                 var html = '';
@@ -57,7 +54,7 @@ function post(data) {
     request.setRequestHeader('Connection', 'close');
     request.send(params);
 
-    load(document.getElementById('comments'), document.getElementById('pagination'), 0);
+    load();
 }
 
 function success(message) {

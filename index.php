@@ -26,8 +26,6 @@
                     <input type="submit" value="Post Comment" />
                 </form>
             </div>
-
-            <div id="pagination"></div>
         </div>
 
         <script src="assets/js/app.js"></script>
