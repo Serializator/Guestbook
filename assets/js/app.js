@@ -1,7 +1,14 @@
+
+/* Invoke the load function whenever the DOM is ready. */
 document.addEventListener('DOMContentLoaded', function() {
     load();
 });
 
+/**
+ * Retrieves all comments from the 'comments.php' endpoint and overrides
+ * the existing inner HTML from the comment container with a HTML structure
+ * generated using the JSON returned from the endpoint.
+ */
 function load() {
     var request = new XMLHttpRequest();
 
@@ -36,6 +43,10 @@ function load() {
     request.send(params);
 }
 
+/**
+ * Posts to the 'post.php' endpoint and set the inner HTML from
+ * the appbar based on the returned status code and response.
+ */
 function post(data) {
     var request = new XMLHttpRequest();
     var params = ('firstName=' + data.get('firstName') + '&lastName=' + data.get('lastName') + '&email=' + data.get('email') + '&website=' + data.get('website') + '&content=' + data.get('content'));
@@ -57,6 +68,9 @@ function post(data) {
     load();
 }
 
+/**
+ * Set the appbar to the 'success' type and set its message.
+ */
 function success(message) {
     var appbar = document.getElementById('appbar');
 
@@ -64,6 +78,9 @@ function success(message) {
     appbar.setAttribute('type', 'success');
 }
 
+/**
+ * Set the appbar to the 'error' type and set its message.
+ */
 function error(message) {
     var appbar = document.getElementById('appbar');
 
