@@ -3,8 +3,7 @@
 
     try {
         $comments = array();
-        $offset = (empty($_GET['offset'] || !is_int($_GET['offset'])) ? 0 : $_GET['offset']);
-        $query = $connection->prepare('SELECT `id`, `username`, `comment`, `date` FROM `comments` OFFSET ? ORDER BY `date`;');
+        $query = $connection->prepare('SELECT `first_name` AS `firstName`, `last_name` AS `lastName`, `email`, `website`, `content` FROM `comments` ORDER BY `date` DESC;');
 
         $query->execute(array($offset));
 
@@ -15,6 +14,6 @@
         print(json_encode($comments));
     } catch(PDOException $exception) {
         http_response_code(500);
-        exit('Query Failed: ' . $exception->getMessage());
+        exit('Something went wrong when we were trying fetch the comments.');
     }
 ?>

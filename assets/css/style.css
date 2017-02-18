@@ -1,0 +1,31 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#appbar {
+    display: none;
+    height: 64px;
+    line-height: 64px;
+    text-align: center;
+    vertical-align: middle;
+    margin-bottom: 12px;
+}
+
+#appbar[type] {
+    display: block;
+}
+
+#appbar[type='success'] {
+    background-color: #4BB543;
+}
+
+#appbar[type='error'] {
+    background-color: #cc0000;
+}
+
+#container {
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}

@@ -11,22 +11,23 @@
         <link type="text/css" rel="stylesheet" href="assets/css/style.css" />
     </head>
     <body>
-        <div id="comments">
-            <!-- Comments are loaded using AJAX. -->
-        </div>
+        <div id="appbar"></div>
 
-        <div class="section">
-            <form onsubmit="post(new FormData(this)); return false;">
-                <input name="firstName" type="text" placeholder="What is your first name?" required />
-                <input name="lastName" type="text" placeholder="What is your last name?" required />
-                <input name="email" type="text" placeholder="What is your email?" required />
-                <textarea name="message" placeholder="What do you want to say?" required></textarea>
-                <input type="submit" value="Post Comment" />
-            </form>
-        </div>
+        <div id="container">
+            <div id="comments"></div>
 
-        <div id="pagination">
-            <!-- Links are loaded when the comments are loaded. -->
+            <div class="section">
+                <form onsubmit="post(new FormData(this)); return false;">
+                    <input name="firstName" type="text" placeholder="What is your first name?" required />
+                    <input name="lastName" type="text" placeholder="What is your last name?" required />
+                    <input name="email" type="text" placeholder="What is your email?" required />
+                    <input name="website" type="text" placeholder="What is your website?" required />
+                    <textarea name="content" placeholder="What do you want to say?" required></textarea>
+                    <input type="submit" value="Post Comment" />
+                </form>
+            </div>
+
+            <div id="pagination"></div>
         </div>
 
         <script src="assets/js/app.js"></script>
