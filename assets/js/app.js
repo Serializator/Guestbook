@@ -15,23 +15,25 @@ function load() {
     request.onreadystatechange = function() {
         if(this.readyState == 4) {
             if(this.status == 200) {
-                var json = JSON.parse(this.responseText);
+                var response = JSON.parse(this.responseText);
                 var html = '';
 
-                for(var index in json) {
-                    var element = json[index];
+                for(var index in response) {
+                    var object = response[index];
 
                     html += '<div class="comment">'
-                    html += ('<span class="comment-name">' + element.firstName + ' ' + element.lastName + '</span>');
-                    html += ('<span class="comment-email">' + element.email + '</span>');
-                    html += ('<span class="comment-website">' + element.website + '</span>');
-                    html += ('<p class="comment-content">' + element.content + '</p>');
+                    html += ('<span class="comment-name">' + object.firstName + ' ' + object.lastName + '</span>');
+                    html += ('<span class="comment-email">' + object.email + '</span>');
+                    html += ('<span class="comment-website">' + object.website + '</span>');
+                    html += ('<p class="comment-content">' + object.content + '</p>');
                     html += '</div>';
                 }
 
                 document.getElementById('comments').innerHTML = html;
             } else if(this.status == 500) {
                 error(this.responseText);
+            } else {
+                error('Unexpected Failure');
             }
         }
     }
@@ -51,12 +53,14 @@ function post(data) {
     var params = ('firstName=' + data.get('first-name') + '&lastName=' + data.get('last-name') + '&email=' + data.get('email') + '&website=' + data.get('website') + '&content=' + data.get('content'));
 
     request.onreadystatechange = function() {
-        if((this.readyState == 4) && (this.status == 200)) {
-            console.log(this.responseText);
-            success('Successfully posted your comment.');
-        } else {
-            console.log(this.responseText);
-            error(this.responseText);
+        if(this.readyState == 4) {
+            if(this.status == 200) {
+                success('Successfully posted your comment.');
+            } else if(this.status == 500) {
+                error(this.responseText);
+            } else {
+                error('Unexpected Failure');
+            }
         }
     }
 
