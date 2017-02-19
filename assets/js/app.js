@@ -22,10 +22,10 @@ function load() {
                     var element = json[index];
 
                     html += '<div class="comment">'
-                    html += ('<span>' + element.firstName + element.lastName + '</span>');
-                    html += ('<span>' + element.email + '</span>');
-                    html += ('<span>' + element.website + '</span>');
-                    html += ('<p>' + element.content + '</p>');
+                    html += ('<span class="comment-name">' + element.firstName + ' ' + element.lastName + '</span>');
+                    html += ('<span class="comment-email">' + element.email + '</span>');
+                    html += ('<span class="comment-website">' + element.website + '</span>');
+                    html += ('<p class="comment-content">' + element.content + '</p>');
                     html += '</div>';
                 }
 
@@ -38,9 +38,8 @@ function load() {
 
     request.open('POST', 'endpoints/comments.php', true)
     request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    request.setRequestHeader('Content-Length', params.length);
     request.setRequestHeader('Connection', 'close');
-    request.send(params);
+    request.send();
 }
 
 /**
@@ -49,12 +48,14 @@ function load() {
  */
 function post(data) {
     var request = new XMLHttpRequest();
-    var params = ('firstName=' + data.get('firstName') + '&lastName=' + data.get('lastName') + '&email=' + data.get('email') + '&website=' + data.get('website') + '&content=' + data.get('content'));
+    var params = ('firstName=' + data.get('first-name') + '&lastName=' + data.get('last-name') + '&email=' + data.get('email') + '&website=' + data.get('website') + '&content=' + data.get('content'));
 
     request.onreadystatechange = function() {
         if((this.readyState == 4) && (this.status == 200)) {
+            console.log(this.responseText);
             success('Successfully posted your comment.');
         } else {
+            console.log(this.responseText);
             error(this.responseText);
         }
     }

@@ -4,7 +4,7 @@
     foreach(array('firstName', 'lastName', 'email', 'website', 'content') as $key) {
         if(empty($_POST[$key])) {
             http_response_code(500);
-            exit('Something went wrong when we were trying to read the data you gave us.')
+            exit('Something went wrong when we were trying to read the data you gave us.');
         }
     }
 

@@ -18,12 +18,15 @@
 
             <div class="section">
                 <form onsubmit="post(new FormData(this)); return false;">
-                    <input name="firstName" type="text" placeholder="What is your first name?" required />
-                    <input name="lastName" type="text" placeholder="What is your last name?" required />
-                    <input name="email" type="text" placeholder="What is your email?" required />
-                    <input name="website" type="text" placeholder="What is your website?" required />
-                    <textarea name="content" placeholder="What do you want to say?" required></textarea>
-                    <input type="submit" value="Post Comment" />
+                    <ul>
+                        <input name="first-name" placeholder="First Name" class="field-partial" required />
+                        <input name="last-name" placeholder="Last Name" class="field-partial" required />
+                        <input name="email" placeholder="Email" class="field-long" required />
+                        <input name="website" placeholder="Website" class="field-long" required />
+                        <textarea name="content" placeholder="What do you want to say?" class="field-long" required></textarea>
+                        <input type="submit" value="Post Comment" />
+                        <input type="reset" class="field-right" value="Clear" />
+                    </ul>
                 </form>
             </div>
         </div>
