@@ -1,8 +1,6 @@
 
 /* Invoke the load function whenever the DOM is ready. */
-document.addEventListener('DOMContentLoaded', function() {
-    load();
-});
+document.addEventListener('DOMContentLoaded', load());
 
 /**
  * Retrieves all comments from the 'comments.php' endpoint and overrides
