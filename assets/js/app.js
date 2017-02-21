@@ -31,7 +31,7 @@ function load() {
             } else if(this.status == 500) {
                 error(this.responseText);
             } else {
-                error('Unexpected Failure');
+                error('Unexpected Failure<br />' + this.responseText);
             }
         }
     }
@@ -57,7 +57,7 @@ function post(data) {
             } else if(this.status == 500) {
                 error(this.responseText);
             } else {
-                error('Unexpected Failure');
+                error('Unexpected Failure<br />' + this.responseText);
             }
         }
     }
