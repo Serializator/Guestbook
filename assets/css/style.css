@@ -67,3 +67,12 @@ input, textarea {
 .field-right {
     float: right;
 }
+
+.field-error {
+    display: none;
+    color: red;
+}
+
+.field-error[active] {
+    display: block;
+}
