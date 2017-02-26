@@ -16,6 +16,8 @@ services:
         environment:
             - 'MYSQL_ROOT_PASSWORD=root'
             - 'MYSQL_DATABASE=guestbook'
+        volumes:
+            - ./database/guestbook.sql:/docker-entrypoint-initdb.d/guestbook.sql
     processor:
         build: ./processor
         volumes:
