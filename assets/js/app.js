@@ -1,34 +1,3 @@
-var errors = {
-    'first-name': {
-        error: 'first-name-error',
-        types: {
-            valueMissing: 'You haven\'t specified a first name.'
-        }
-    }, 'last-name': {
-        error: 'last-name-error',
-        types: {
-            valueMissing: 'You haven\'t specified a last name.'
-        }
-    }, 'email': {
-        error: 'email-error',
-        types: {
-            valueMissing: 'You haven\'t specified an email.',
-            typeMismatch: 'You haven\'t specified a proper email.'
-        }
-    }, 'website': {
-        error: 'website-error',
-        types: {
-            valueMissing: 'You haven\'t specified an website.',
-            typeMismatch: 'You haven\'t specified a proper URL.'
-        }
-    }, 'content': {
-        error: 'content-error',
-        types: {
-            valueMissing: 'You haven\'t specified a comment.',
-            tooLong: 'Your comment is to long.'
-        }
-    }
-};
 
 /* Invoke the load function whenever the DOM is ready. */
 document.addEventListener('DOMContentLoaded', load());
@@ -40,25 +9,23 @@ document.getElementById('comment-form').addEventListener('submit', function(even
     return false;
 });
 
-document.getElementById('first-name-field').addEventListener('blur', function(event) {
-    validate(event.target, document.getElementById('first-name-error'));
-});
+/**
+ * Turn given parameters into a HTML comment block.
+ */
+function format(firstName, lastName, email, gravatar, date, content) {
+    var html = '';
 
-document.getElementById('last-name-field').addEventListener('blur', function(event) {
-    validate(event.target, document.getElementById('last-name-error'));
-});
+    html += '<ul class="collection">'
+    html += '<li class="collection-item avatar">';
+    html += '<img src="https://www.gravatar.com/avatar/' + gravatar + '" class="circle" />';
+    html += '<span class="title">' + firstName + ' ' + lastName + '</span>';
+    html += '<p><i>' + email + '<br /></i>' + content + '</p>';
+    html += '<ul class="secondary-content"><li>' + date + '</li></ul>'
+    html += '</li>';
+    html += '</ul>';
 
-document.getElementById('email-field').addEventListener('blur', function(event) {
-    validate(event.target, document.getElementById('email-error'));
-});
-
-document.getElementById('website-field').addEventListener('blur', function(event) {
-    validate(event.target, document.getElementById('website-error'));
-});
-
-document.getElementById('content-field').addEventListener('blur', function(event) {
-    validate(event.target, document.getElementById('content-error'));
-});
+    return html;
+}
 
 /**
  * Retrieves all comments from the 'comments.php' endpoint and overrides
@@ -72,24 +39,29 @@ function load() {
         if(this.readyState == 4) {
             if(this.status == 200) {
                 var response = JSON.parse(this.responseText);
-                var html = '';
+                var container = document.getElementById('comments');
+                var html;
 
                 for(var index in response) {
                     var object = response[index];
 
-                    html += '<div class="comment">';
-                    html += ('<span class="comment-name">' + object.firstName + ' ' + object.lastName + '</span>');
-                    html += ('<span class="comment-email">' + object.email + '</span>');
-                    html += ('<span class="comment-website">' + object.website + '</span>');
-                    html += ('<p class="comment-content">' + object.content + '</p>');
-                    html += '</div>';
+                    if(html === undefined) {
+                        html = '';
+                    }
+
+                    html += format(object.firstName, object.lastName, object.email, object.gravatar, object.date, object.content);
                 }
 
-                document.getElementById('comments').innerHTML = html;
+                if(html !== undefined) {
+                    container.innerHTML = html;
+                    container.style.display = 'block';
+
+                    document.getElementById('comment-form').className = 'col s5';
+                }
             } else if(this.status == 500) {
-                error(this.responseText);
+                Materialize.toast('Internal Server Error: ' + this.responseText, 6000);
             } else {
-                error('Unexpected Failure: ' + this.responseText);
+                Materialize.toast('Unexpected Error: ' + this.responseText, 6000);
             }
         }
     }
@@ -111,24 +83,20 @@ function post(data) {
     request.onreadystatechange = function() {
         if(this.readyState == 4) {
             if(this.status == 200) {
-                load();
-                document.getElementById('comment-form').reset();
-                success('Successfully posted your comment.');
-            } else if(this.status == 400) {
                 var response = JSON.parse(this.responseText);
+                var container = document.getElementById('comments');
 
-                for(var index in response) {
-                    var error = response[index];
-                    var handler = errors[error.field];
-                    var element = document.getElementById(handler.error);
+                container.innerHTML = (format(response.firstName, response.lastName, response.email, response.gravatar, response.date, response.content) + container.innerHTML);
+                container.style.display = 'block';
 
-                    element.innerHTML = handler.types[error.type];
-                    element.setAttribute('active', '');
-                }
+                document.getElementById('comment-form').className = 'col s5';
+                document.getElementById('comment-form').reset();
+            } else if(this.status == 400) {
+                Materialize.toast('Bad Request: ' + this.responseText, 6000);
             } else if(this.status == 500) {
-                error(this.responseText);
+                Materialize.toast('Internal Server Error: ' + this.responseText, 6000);
             } else {
-                error('Unexpected Failure: ' + this.responseText);
+                Materialize.toast('Unexpected Error: ' + this.responseText, 6000);
             }
         }
     }
@@ -138,51 +106,4 @@ function post(data) {
     request.setRequestHeader('Content-Length', params.length);
     request.setRequestHeader('Connection', 'close');
     request.send(params);
-}
-
-/**
- * Validate whether the given input field is valid.
- * If not, it will display an error message above the input field.
- */
-function validate(input) {
-    var handler = errors[input.name];
-    var error = document.getElementById(handler.error);
-
-    if(input.checkValidity()) {
-        if(error.hasAttribute('active')) {
-            error.removeAttribute('active');
-        }
-    } else {
-        var text;
-
-        for(var property in input.validity) {
-            if(handler.types.hasOwnProperty(property) && input.validity[property]) {
-                text = handler.types[property];
-                break;
-            }
-        }
-
-        error.setAttribute('active', '');
-        error.innerHTML = text;
-    }
-}
-
-/**
- * Set the appbar to the 'success' type and set its message.
- */
-function success(message) {
-    var appbar = document.getElementById('appbar');
-
-    appbar.innerHTML = message;
-    appbar.setAttribute('type', 'success');
-}
-
-/**
- * Set the appbar to the 'error' type and set its message.
- */
-function error(message) {
-    var appbar = document.getElementById('appbar');
-
-    appbar.innerHTML = message;
-    appbar.setAttribute('type', 'error');
 }

@@ -1,74 +1,54 @@
 <?php
     require_once('snippets/database.php');
 
-    $errors = array();
+    $valid = true;
 
-    if(empty($_POST['firstName'])) {
-        array_push($errors, array(
-            'field' => 'first-name',
-            'type' => 'valueMissing'
-        ));
-    }
-
-    if(empty($_POST['lastName'])) {
-        array_push($errors, array(
-            'field' => 'last-name',
-            'type' => 'valueMissing'
-        ));
+    if(empty($_POST['firstName']) || empty($_POST['lastName'])) {
+        $valid = false;
     }
 
     if(empty($_POST['email'])) {
-        array_push($errors, array(
-            'field' => 'email',
-            'type' => 'valueMissing'
-        ));
+        $valid = false;
     } else {
         $match = preg_match('/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$/', $_POST['email']);
 
         if(($match === 0) || ($match === false)) {
-            array_push($errors, array(
-                'field' => 'email',
-                'type' => 'typeMismatch'
-            ));
+            $valid = false;
         }
     }
 
     if(empty($_POST['website'])) {
-        array_push($errors, array(
-            'field' => 'website',
-            'type' => 'valueMissing'
-        ));
+        $valid = false;
     } else {
         $match = preg_match('/https?:\/\/.+/', $_POST['website']);
 
         if(($match === 0) || ($match === false)) {
-            array_push($errors, array(
-                'field' => 'website',
-                'type' => 'typeMismatch'
-            ));
+            $valid = false;
         }
     }
 
-    if(empty($_POST['content'])) {
-        array_push($errors, array(
-            'field' => 'content',
-            'type' => 'valueMissing'
-        ));
-    } else if(strlen($_POST['content']) > 126) {
-        array_push($errors, array(
-            'field' => 'content',
-            'type' => 'tooLong'
-        ));
+    if(empty($_POST['content']) || (strlen($_POST['content']) > 126)) {
+        $valid = false;
     }
 
-    if(sizeof($errors) > 0) {
+    if($valid !== true) {
         http_response_code(400);
-        exit(json_encode($errors));
+        exit('Inappropriate Data');
     }
 
     try {
-        $query = $connection->prepare('INSERT INTO `comments` (`first_name`, `last_name`, `address`, `email`, `website`, `content`) VALUES (?, ?, ?, ?, ?, ?);');
-        $query->execute(array($_POST['firstName'], $_POST['lastName'], $_SERVER['REMOTE_ADDR'], $_POST['email'], $_POST['website'], $_POST['content']));
+        $date = date('Y-m-d H:i:s');
+        $query = $connection->prepare('INSERT INTO `comments` (`first_name`, `last_name`, `address`, `email`, `website`, `date`, `content`) VALUES (?, ?, ?, ?, ?, ?, ?);');
+        $query->execute(array($_POST['firstName'], $_POST['lastName'], $_SERVER['REMOTE_ADDR'], $_POST['email'], $_POST['website'], $date, $_POST['content']));
+
+        print(json_encode(array(
+            'firstName' => $_POST['firstName'],
+            'lastName' => $_POST['lastName'],
+            'email' => $_POST['email'],
+            'website' => $_POST['website'],
+            'content' => $_POST['content'],
+            'date' => $date,
+            'gravatar' => md5($_POST['email']))));
     } catch(PDOException $exception) {
         http_response_code(500);
         exit('Something went wrong when we were trying to store your comment.');

@@ -1,78 +1,11 @@
-* {
-    margin: 0;
-    padding: 0;
+body {
+    background: #F9F9F9;
 }
 
-#appbar {
+.container {
+    margin-top: 80px;
+}
+
+#comments {
     display: none;
-    height: 64px;
-    line-height: 64px;
-    text-align: center;
-    vertical-align: middle;
-    margin-bottom: 12px;
-}
-
-#appbar[type] {
-    display: block;
-}
-
-#appbar[type='success'] {
-    background-color: #4BB543;
-}
-
-#appbar[type='error'] {
-    background-color: #cc0000;
-}
-
-#container {
-    width: 420px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 21px;
-}
-
-.comment {
-    margin-bottom: 12px;
-    border: 1px solid;
-    padding: 8px;
-}
-
-.comment-name {
-    font-weight: bold;
-}
-
-.comment-email {
-    font-style: italic;
-    float: right;
-}
-
-.comment-website, .comment-content {
-    display: block;
-}
-
-input, textarea {
-    margin-bottom: 12px;
-    resize: none;
-}
-
-.field-partial {
-    width: 44%;
-}
-
-.field-long {
-    display: block;
-    width: 100%;
-}
-
-.field-right {
-    float: right;
-}
-
-.field-error {
-    display: none;
-    color: red;
-}
-
-.field-error[active] {
-    display: block;
 }
