@@ -3,14 +3,14 @@ services:
     web:
         build: ./web
         ports:
-            - '80:80'
+            - '8080:80'
         volumes_from:
             - processor
         links:
             - database
             - processor
     database:
-        image: mysql:8.0
+        image: mysql:5.7
         ports:
             - '3306:3306'
         environment:
